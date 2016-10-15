@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Custom Info Window</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
+    <style>
+      html, body, #mapDiv { height: 100%; width: 100%; margin: 0; padding: 0; }
+  
+
+  
+    </style>
+
+
+    <script src="https://js.arcgis.com/3.18/"></script>
+    <script>
+
+    require([
+      "dojo/dom",
+      "dojo/dom-construct",
+      "esri/map",
+      "esri/layers/FeatureLayer",
+      "esri/InfoTemplate",
+       "esri/symbols/PictureMarkerSymbol",
+      "dojo/string",
+      "esri/renderers/SimpleRenderer",
+       "esri/graphic",
+       "esri/lang",
+        "esri/Color",
+        "dojo/number",
+        "dojo/dom-style", 
+        "dijit/TooltipDialog",
+        "dijit/popup",
+      "dojo/domReady!"
+    ], function(
+       dom,
+       domConstruct,
+       Map,
+       FeatureLayer,
+       InfoTemplate,
+       PictureMarkerSymbol,
+       string,
+       SimpleRenderer,
+       Graphic, 
+       esriLang,
+        Color,
+        number, 
+        domStyle, 
+        TooltipDialog, 
+        dijitPopup
+       
+    ) {
+      //create the custom info window specifying any input options
+
+
+      //create the map and specify the custom info window as the info window that will
+      //be used by the map
+
+      var map = new Map("mapDiv", {
+        center: [0,0],
+        zoom: 1,
+        basemap: "gray",
+      });
+
+      //define the info template that is used to display the popup content.
+      var template = new InfoTemplate();
+      template.setTitle("<b>${qAddress}</b>");
+      template.setContent("hello");
+      template.setContent(getTextContent);
+
+      //resize the info window
+      
+      
+      //create the feature layer (street trees of San Francisco)
+      var conflict = new FeatureLayer("https://services2.arcgis.com/RyJEMkDR4Jnx7PU8/arcgis/rest/services/MapAction_Emergency_Missions/FeatureServer/0",{
+        infoTemplate: template,
+        outFields: ["*"],
+        infoTemplate: new InfoTemplate("${Disaster_Category}", getTextContent)
+      });
+      conflict.setDefinitionExpression("Disaster_Category = 'Conflict'");
+      
+      // picture marker for Conflict
+      var symbol_conflict = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/OCHA-Symbols/master/cluster_nutrition_40px_bluebox.png', 32,32);
+      
+     conflict.setRenderer(new SimpleRenderer(symbol_conflict));
+
+     map.addLayers([conflict]);
+
+
+    // picture marker from esri
+    var highlight_conflict = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/OCHA-Symbols/master/cluster_nutrition_40px_redbox.png',42,42); 
+
+
+  
+  
+    //pop up when clicked
+    function getTextContent(graphic) {
+      var a = graphic.attributes;
+      var out = "";
+      out += a["Disaster_Category"]+"<br>";
+    //  out += a["Disaster_Category"]+"<br>";
+
+    return out;
+    } 
+    
+    
+    //Hover graphic for Team_London_Young_Ambassadors   
+    var last_hover;
+    var do_hover0 = function(evt){
+      if (last_hover && evt.graphic==last_hover.graphic) return;
+      last_hover = evt;
+      var t = "<div><b>${Disaster_Category}</b></div>"
+    
+      var content = esriLang.substitute(evt.graphic.attributes,t);
+      
+      var highlightGraphic_Conflict = new Graphic(evt.graphic.geometry,highlight_conflict);
+      map.graphics.add(highlightGraphic_Conflict);
+      dialog.setContent(content);
+      domStyle.set(dialog.domNode, "opacity", 0.9);
+      dijitPopup.open({
+        popup: dialog, 
+        x: evt.pageX+5,
+        y: evt.pageY+5
+      });
+    }
+  
+  
+
+    //listen for when the onMouseOver event fires on the Opportunity Areas
+    //when fired, create a new graphic with the geometry from the event.graphic and add it to the maps graphics layer
+    
+    conflict.on("mouse-over", do_hover0);
+
+    //clear graphics
+    function closeDialog() {
+      map.graphics.clear();
+      dijitPopup.close(dialog);
+    }
+  
+    
+    //new tooltip dialog for inital tooltip mouse-over events
+        dialog = new TooltipDialog({
+          id: "tooltipDialog",
+          style: "position: absolute; width: 190px; font: normal; 10pt Helvetica;z-index:100;opacity:1;"
+        });
+        dialog.startup();
+    
+
+  });
+    </script>
+  </head>
+  <body>
+    <div id="mapDiv"></div>
+  </body>
+</html>
