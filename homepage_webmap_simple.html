@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-    <title>Feature Layer - display results as an InfoWindow onHover</title>
+    <title>MapAction Missions</title>
 
     <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/tundra/tundra.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
@@ -31,6 +31,7 @@
     	z-index:500;
     	-webkit-filter: drop-shadow( 0px 2px 1px #b2b2b2 );
     	filter: drop-shadow( 0px 2px 1px #b2b2b2);
+		opacity:0.9
     	}
 	
     </style>
@@ -75,7 +76,7 @@
   
 	    // Picture markers from OCHA
 	    var symbol_conflict_inactive = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/crisis_conflict_40px_bluebox.png', 18,18);
-		var symbol_cycone_active = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/disaster_cyclone_40px_redbox.png', 18,18);
+		var symbol_cylone_active = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/disaster_cyclone_40px_redbox.png', 18,18);
 		
 	  
 	  
