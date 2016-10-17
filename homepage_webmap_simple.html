@@ -79,9 +79,10 @@
 	    var symbol_cyclone_active = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/disaster_cyclone_40px_redbox.png', 18,18);
 		
 	  
-	  
+	  //set symbols to feature layers
 	    conflict_inactive.setRenderer(new SimpleRenderer(symbol_conflict_inactive));
-
+	    cyclone_active.setRenderer(new SimpleRenderer(symbol_cyclone_active));
+	    
 	    map.addLayers([conflict_inactive, cyclone_active]);
 
 	    map.infoWindow.resize(245,125);
