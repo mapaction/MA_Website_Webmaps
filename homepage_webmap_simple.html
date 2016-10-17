@@ -29,9 +29,16 @@
       
       #mapDiv_gc {
     	z-index:500;
-    	-webkit-filter: drop-shadow( 0px 2px 1px #b2b2b2 );
-    	filter: drop-shadow( 0px 2px 1px #b2b2b2);
-		opacity:0.9
+    //	-webkit-filter: drop-shadow( 0px 2px 1px #b2b2b2 );
+   // 	filter: drop-shadow( 0px 2px 1px #b2b2b2);
+		  opacity:0.7
+    	}
+    	
+    	#mapDiv_layer1{
+    	 opacity:0.8;
+    	 z-index:400; 
+    	  
+    	}
     	}
 	
     </style>
@@ -56,7 +63,9 @@
           basemap: "gray",
           center: [0,0],
           zoom: 3,
-          slider: false
+          slider: true,
+          //smartNavigation:true,
+          
         });
 
 		//SETTING UP INDIVIDUAL LAYERS
@@ -75,8 +84,8 @@
 	  
   
 	    // Picture markers from OCHA
-	    var symbol_conflict_inactive = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/crisis_conflict_40px_bluebox.png', 18,18);
-	    var symbol_cyclone_active = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/disaster_cyclone_40px_redbox.png', 18,18);
+	    var symbol_conflict_inactive = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/crisis_conflict_40px_bluebox.png', 24,24);
+	    var symbol_cyclone_active = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/disaster_cyclone_40px_redbox.png', 24,24);
 		
 	  
 	  //set symbols to feature layers
@@ -105,22 +114,21 @@
 		//SETTING UP HOVER OVER
 		
 		// Picture markers from OCHA
-        var highlight_conflict_inactive = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/crisis_conflict_40px_bluebox.png',22,22); 
-		var highlight_cyclone_active = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/disaster_cyclone_40px_redbox.png',22,22); 
+        var highlight_conflict_inactive = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/crisis_conflict_40px_bluebox.png',28,28); 
+		var highlight_cyclone_active = new PictureMarkerSymbol('https://raw.githubusercontent.com/mapaction/MA_Website_Webmaps/master/images/disaster_cyclone_40px_redbox.png',28,28); 
 
 
 
         //Listen for mouse over event and open popup - conflict inactive
         conflict_inactive.on("mouse-over", function(evt){
-          var t = "<b>${Disaster_Category}</b>"+": "+"${Disaster_Type}<br>"
-            + "<b>${Event_Name} </b>"
-            + "<b>${Country} </b>"
-            + "<b>${Start_Date:DateFormat} </b>"
+          var t = "<b>${Country}</b>"+": "+"${Disaster_Type}<br>"
+            //+ "<b>${Country} </b>"
+            + "<b>${Start_Date:DateFormat(datePattern:'MMMM, yyyy', selector:'date')} </b>"
           var content = esriLang.substitute(evt.graphic.attributes,t);
           var highlightGraphic_conflict_inactive = new Graphic(evt.graphic.geometry,highlight_conflict_inactive);
           map.graphics.add(highlightGraphic_conflict_inactive);
           dialog.setContent(content);
-          domStyle.set(dialog.domNode, "opacity", 0.85);
+          domStyle.set(dialog.domNode, "opacity", 0.9);
           dijitPopup.open({
             popup: dialog,
             x: evt.pageX,
@@ -132,13 +140,14 @@
         cyclone_active.on("mouse-over", function(evt){
           var t = "<b>${Disaster_Category}</b>"+": "+"${Disaster_Type}<br>"
             + "<b>${Event_Name} </b>"
+            + "<b>${City} </b>"
             + "<b>${Country} </b>"
             + "<b>${Start_Date:DateFormat} </b>"
           var content = esriLang.substitute(evt.graphic.attributes,t);
           var highlightGraphic_cyclone_active = new Graphic(evt.graphic.geometry,highlight_cyclone_active);
           map.graphics.add(highlightGraphic_cyclone_active);
           dialog.setContent(content);
-          domStyle.set(dialog.domNode, "opacity", 0.85);
+          domStyle.set(dialog.domNode, "opacity", 0.9);
           dijitPopup.open({
             popup: dialog,
             x: evt.pageX,
@@ -162,3 +171,4 @@
     </div>
   </body>
 </html>
+
