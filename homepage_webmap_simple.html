@@ -134,7 +134,7 @@
             + "<b>${Start_Date:DateFormat} </b>"
           var content = esriLang.substitute(evt.graphic.attributes,t);
           var highlightGraphic_cyclone_active = new Graphic(evt.graphic.geometry,highlight_cyclone_active);
-          map.graphics.add(highlightGraphic_conflict_inactive);
+          map.graphics.add(highlightGraphic_cyclone_active);
           dialog.setContent(content);
           domStyle.set(dialog.domNode, "opacity", 0.85);
           dijitPopup.open({
