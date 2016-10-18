@@ -7,7 +7,125 @@
   <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/tundra/tundra.css">
   <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
   <style>
-    html, body, #mapDiv { height: 100%; width: 100%; margin: 0; padding: 0; }  
+    html, body, #mapDiv { height: 100%; width: 100%; margin: 0; padding: 0; }
+    .pulse{
+      animation-name: pulse;
+      -webkit-animation-name: pulse;	
+      -moz-animation-name: pulse;
+        
+      animation-duration: 2s;	
+      -webkit-animation-duration: 2s;
+      -moz-animation-duration: 2s;
+
+      animation-iteration-count: infinite;
+      -webkit-animation-iteration-count: infinite;
+      -moz-animation-iteration-count: infinite;
+
+        opacity: 0.35;
+        stroke: rgb(255, 0, 0);
+        stroke-width: 3pt;    
+    }
+    
+    .currentmission{
+      animation-name: pulse;
+      -webkit-animation-name: pulse;	
+      -moz-animation-name: pulse;
+        
+      animation-duration: 2s;	
+      -webkit-animation-duration: 2s;
+      -moz-animation-duration: 2s;
+
+      animation-iteration-count: infinite;
+      -webkit-animation-iteration-count: infinite;
+      -moz-animation-iteration-count: infinite;
+
+        opacity: 0.35;
+        stroke: rgb(0, 255, 0);
+        stroke-width: 3pt;    
+    }
+
+    @keyframes pulse {
+      0% { 
+            box-shadow:0 0 0px red;    
+        opacity: 0.3;		
+      }
+      15% { 
+            box-shadow:0 0 150px red;      
+        opacity: 0.75;	
+      }	
+      30% {
+            box-shadow:0 0 0px red;      
+        opacity: 0.3;	
+      }
+      31% { 
+            box-shadow:0 0 0px red;    
+        opacity: 0.3;		
+      }
+      45% { 
+            box-shadow:0 0 150px red;      
+        opacity: 0.75;	
+      }	
+      60% {
+            box-shadow:0 0 0px red;      
+        opacity: 0.3;	
+      }	    
+    }
+
+    @-webkit-keyframes pulse {
+      0% {
+            -webkit-box-shadow:0 0 0px red;
+        opacity: 0.3;		
+      }
+      15% {
+            -webkit-box-shadow:0 0 150px red;
+        opacity: 0.75;	
+      }	
+      30% {
+            -webkit-box-shadow:0 0 0px red;     
+        opacity: 0.3;	
+      }
+      31% {
+            -webkit-box-shadow:0 0 0px red;
+        opacity: 0.3;		
+      }
+      45% {
+            -webkit-box-shadow:0 0 150px red;
+        opacity: 0.75;	
+      }	
+      60% {
+            -webkit-box-shadow:0 0 0px red;     
+        opacity: 0.3;	
+      }	    
+    }
+
+    @-moz-keyframes pulse {
+      0% { 
+            -moz-box-shadow: 0 0 0px red; 
+        opacity: 0.3;		
+      }
+      15% { 
+            -moz-box-shadow: 0 0 150px red; 
+        opacity: 0.75;	
+      }	
+      30% {
+
+            -moz-box-shadow: 0 0 0px red; 
+        opacity: 0.3;	
+      }
+      31% { 
+            -moz-box-shadow: 0 0 0px red; 
+        opacity: 0.3;		
+      }
+      45% { 
+            -moz-box-shadow: 0 0 150px red; 
+        opacity: 0.75;	
+      }	
+      60% {
+
+            -moz-box-shadow: 0 0 0px red; 
+        opacity: 0.3;	
+      }		
+    }    
   </style>
   <script src="https://js.arcgis.com/3.18/"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -15,6 +133,7 @@
   require([
     "esri/map",
     "esri/layers/FeatureLayer",
+    "esri/layers/GraphicsLayer",
     "esri/InfoTemplate",
     "esri/dijit/PopupTemplate",
     "esri/symbols/PictureMarkerSymbol",
@@ -39,6 +158,7 @@
   ], function(
     Map,
     FeatureLayer,
+    GraphicsLayer,
     InfoTemplate,
     PopupTemplate,
     PictureMarkerSymbol,
@@ -135,10 +255,7 @@
     description: "{description}"
   }); 
    
-  featureLayer = new FeatureLayer(featureCollection, {
-      id: 'missionLayer',
-      infoTemplate: popupTemplate
-  });
+  featureLayer = new FeatureLayer(featureCollection);
   
   featureLayer.setRenderer(renderer); 
    
@@ -148,8 +265,16 @@
     basemap: "gray",
     wrapAround180: false
     });
-    
-  map.addLayers([featureLayer]);
+  
+  currentMissionsLayer = new GraphicsLayer();
+  currentMissionsLayer.styled = false;
+  currentMissionsLayer.surfaceType = "svg";
+
+  highlightLayer = new GraphicsLayer();
+  
+  map.addLayers([currentMissionsLayer,highlightLayer,featureLayer]);
+  
+  requestGoogleSpreadsheet();
   
   map.infoWindow.resize(245,125);
   
@@ -160,10 +285,8 @@
   dialog.startup()
   
   var highlightSymbol = new SimpleMarkerSymbol({
-    "color": [255,0,255,64],
-    "size": 20,
-    "xoffset": 0,
-    "yoffset": 0,
+    "color": [255,0,255,0],
+    "size": 22,
     "type": "esriSMS",
     "style": "esriSMSSquare",
     "outline": {
@@ -176,17 +299,28 @@
         
   //close the dialog when the mouse leaves the highlight graphic
   map.on("load", function(){
-    map.graphics.enableMouseEvents();
-    map.graphics.on("mouse-out", closeDialog);
+    featureLayer.enableMouseEvents();    
   });
-
-  //listen for when the onMouseOver event fires on the countiesGraphicsLayer
+  
+  featureLayer.on("mouse-out", closeDialog);
+  
+  currentMissionsLayer.on("graphic-draw", function(evt){
+    className = "currentmission";
+    evt.node.setAttribute("class", className);
+  });
+  
+  highlightLayer.on("graphic-draw", function(evt){
+    className = "currentmission";
+    evt.node.setAttribute("class", "pulse");
+  });
+  
+  //listen for when the onMouseOver event fires on the featureLayer
   //when fired, create a new graphic with the geometry from the event.graphic and add it to the maps graphics layer
   featureLayer.on("mouse-over", function(evt){
     var t = "<b>${title}</b><hr>${description}";
     var content = esriLang.substitute(evt.graphic.attributes,t);
     var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
-    map.graphics.add(highlightGraphic);
+    highlightLayer.add(highlightGraphic);
     dialog.setContent(content);    
     centerPoint = screenUtils.toScreenGeometry(map.extent, map.width, map.height, webMercatorUtils.geographicToWebMercator(evt.graphic.geometry));    
     domStyle.set(dialog.domNode, "opacity", 0.95);
@@ -198,12 +332,10 @@
   });
 
   function closeDialog() {
-    map.graphics.clear();
+    highlightLayer.clear();
     dijitPopup.close(dialog);
-  };   
-   
-  requestGoogleSpreadsheet();
-
+  };
+  
   function requestGoogleSpreadsheet() {
     //get mission details from Google Spreadsheet
     var requestHandle = esriRequest({
@@ -215,20 +347,28 @@
    
   function requestSucceeded(response, io) {
       //loop through the items and add to the feature layer
-      var features = [];
-      array.forEach(response.feed.entry, function(item) {
-         var attr = {};
-         attr["description"] = item.gsx$description.$t;
-         attr["title"] = item.gsx$eventname.$t;
-         attr["disaster_category"] = item.gsx$disastercategory.$t
-         attr["mission_status"] = item.gsx$missionstatus.$t
+    var features = [];    
+    array.forEach(response.feed.entry, function(item) {
+      if(item.gsx$activitysubcategory.$t == "Deployment")
+      {
+        var attr = {};
+        attr["description"] = item.gsx$description.$t;
+        attr["title"] = item.gsx$eventname.$t;
+        attr["disaster_category"] = item.gsx$disastercategory.$t
+        attr["mission_status"] = item.gsx$missionstatus.$t
 
-         var geometry = new Point(item.gsx$longitude.$t,item.gsx$latitude.$t,new SpatialReference({ wkid: 4326 }));
+        var geometry = new Point(item.gsx$longitude.$t,item.gsx$latitude.$t,new SpatialReference({wkid:4326}));
 
-         var graphic = new Graphic(geometry);
-         graphic.setAttributes(attr);
-         features.push(graphic);         
-      });
+        var graphic = new Graphic(geometry);
+        graphic.setAttributes(attr);
+        features.push(graphic);
+        if (item.gsx$missionstatus.$t == "ACTIVE")
+        {
+          var currentMissionGraphic = new Graphic(geometry,highlightSymbol);
+          currentMissionsLayer.add(currentMissionGraphic);
+        }
+      }
+    });    
     featureLayer.applyEdits(features, null, null);    
   };
 
