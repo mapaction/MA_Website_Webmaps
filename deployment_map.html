@@ -329,11 +329,13 @@
       x: centerPoint.x,
       y: centerPoint.y
     });
+    currentMissionsLayer.hide();
   });
 
   function closeDialog() {
     highlightLayer.clear();
     dijitPopup.close(dialog);
+    currentMissionsLayer.show();
   };
   
   function requestGoogleSpreadsheet() {
