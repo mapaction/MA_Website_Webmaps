@@ -302,6 +302,10 @@
     featureLayer.enableMouseEvents();    
   });
   
+  map.on("pan-end", function(){
+    closeDialog();    
+  });
+  
   featureLayer.on("mouse-out", closeDialog);
   
   currentMissionsLayer.on("graphic-draw", function(evt){
