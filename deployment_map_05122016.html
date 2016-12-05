@@ -41,6 +41,17 @@
       background-color: #dddddd;
       color: #000000;
     }
+    
+    #info{
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
+    z-index: 99;
+    opacity: 0.9;
+    background-color: whitesmoke;
+    border-top-right-radius: 8px;
+    padding: 0px 0px 0px 10px;
+  }
   </style>
   <script src="https://js.arcgis.com/3.18/"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -67,6 +78,7 @@
     "dojo/query",
     "dojo/dom-class",
     "esri/dijit/Popup",
+    "esri/dijit/Legend",
     "dojo/on",
     "dojo/_base/array",
     "dojo/domReady!"
@@ -92,6 +104,7 @@
     query,
     domClass,
     Popup,
+    Legend,
     on,
     array    
   ) {
@@ -192,6 +205,8 @@
     infoWindow: popup
   });
   
+  
+  
   var link = domConstruct.create("a",{
     "innerHTML": "Map Catalogue", //text that appears in the popup for the link 
     "href": "javascript: void(0);"
@@ -264,12 +279,25 @@
 
   function requestFailed(error) {
     console.log('failed');
-  };    
+  };
+
+map.on("load", function(evt){
+    var legend = new Legend({
+      map: map,
+      layerInfos: [{
+        layer: featureLayer,
+        title: "Legend"
+      }]
+    }, "legendDiv");
+    
+    legend.startup(); 
+  });  
 });
   
 </script>
 </head>
 <body class="claro">
   <div id="map"></div>
+  <div id="info"><div id="legendDiv"></div></div>
 </body>
 </html>
