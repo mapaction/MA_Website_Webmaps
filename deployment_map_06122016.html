@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>  
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+  <title>MapAction Deployments</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
+  <script>
+        var dojoConfig = {
+            parseOnLoad: false,
+            async: true,
+            tlmSiblingOfDojo: false,
+            packages: [{
+                name: "fcl",
+                location: location.pathname.replace(/\/[^/]+$/, '') + "/fcl"
+            }]
+        };
+    </script>
+  <style>
+    html, body, #map {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .esriPopup.myTheme .titlePane,
+    .dj_ie7 .esriPopup.myTheme .titlePane .title {
+      background-color: #106cb5;
+      color: #333333;
+      font-weight: bold;
+    }
+
+    .esriPopup.myTheme .titlePane {
+      border-bottom: 1px solid #121310;
+    }
+
+    .esriPopup.myTheme a {
+      color: #106cb5;
+    }
+    .esriPopup.myTheme .pointer.top{
+      background-color:#899752;
+    }
+    .esriPopup.myTheme .outerPointer,  .esriPopup.myTheme .pointer.bottom{
+      background-color:#424242;
+    }
+
+    .esriPopup.myTheme .contentPane,
+    .esriPopup.myTheme .actionsPane {
+      border-color: 1px solid #121310;
+      background-color: #dddddd;
+      color: #000000;
+    }
+    
+    #info{
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
+    z-index: 99;
+    opacity: 0.9;
+    background-color: whitesmoke;
+    border-top-right-radius: 8px;
+    padding: 0px 0px 0px 10px;
+  }
+  </style>
+  <script src="https://js.arcgis.com/3.18/"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>
+  require([
+    "esri/map",
+    "esri/layers/FeatureLayer",
+    "esri/InfoTemplate",
+    "esri/dijit/PopupTemplate",
+    "esri/symbols/PictureMarkerSymbol",
+    "esri/renderers/UniqueValueRenderer",
+    "esri/renderers/ClassBreaksRenderer",
+    "esri/symbols/SimpleMarkerSymbol",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/config",
+    "esri/request",
+    "esri/geometry/Point",
+    "esri/SpatialReference",
+    "esri/graphic",
+    "esri/Color",
+    "esri/lang",
+    "fcl/FlareClusterLayer_v3",
+    "dojo/dom-style",
+    "dojo/dom-construct",
+    "dojo/query",
+    "dojo/dom-class",
+    "esri/dijit/Popup",
+    "esri/dijit/Legend",
+    "dojo/on",
+    "dojo/_base/array",
+    "dojo/domReady!"
+  ], function(
+    Map,
+    FeatureLayer,
+    InfoTemplate,
+    PopupTemplate,
+    PictureMarkerSymbol,
+    UniqueValueRenderer,
+    ClassBreaksRenderer,
+    SimpleMarkerSymbol,
+    SimpleFillSymbol,
+    SimpleLineSymbol,
+    esriConfig,
+    esriRequest,
+    Point,
+    SpatialReference,
+    Graphic,
+    Color,
+    esriLang,
+    FlareClusterLayer,
+    domStyle,
+    domConstruct,
+    query,
+    domClass,
+    Popup,
+    Legend,
+    on,
+    array    
+  ) {
+  
+  //Use CORS-enabled https URL to access the google spreadsheet  
+  esriConfig.defaults.io.corsEnabledServers.push("spreadsheets.google.com");
+  
+  //define the symbology renderer for a default marker  
+  var defaultSymbol = new SimpleMarkerSymbol().setSize(16).setColor("#106cb5").setOutline(null);  
+  
+  var renderer = new UniqueValueRenderer(defaultSymbol, "disastertype");
+    
+  renderer.addValue("Conflict", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/crisis_conflict_32px_icon.png", "width": 18, "height": 18, "type":"esriPMS"}));
+  renderer.addValue("Cyclone", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_cyclone_32px_icon.png", "width": 18, "height": 18, "type":"esriPMS"}));
+  renderer.addValue("Drought", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/cluster_nutrition_32px_icon.png", "width": 18, "height": 18, "type":"esriPMS"}));
+  renderer.addValue("Earthquake", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_earthquake_32px_icon.png", "width": 18, "height": 18, "type":"esriPMS"}));
+  renderer.addValue("El Niño", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_heavy_rain_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+  renderer.addValue("Ebola", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_epidemic_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+  renderer.addValue("Floods", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_flood_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+  renderer.addValue("Heat Wave", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_heatwave_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+  renderer.addValue("Landslide", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_landslide_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+  renderer.addValue("Munitions Explosion", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/security_mine_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+  renderer.addValue("Population Displacement", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/crisis_population_displacement_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+  renderer.addValue("Tsunami", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_tsunami_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+  renderer.addValue("Volcano", PictureMarkerSymbol({"url": "http://mw1.google.com/crisisresponse/icons/un-ocha/disaster_volcano_32px_icon.png","width": 18,"height": 18,"type":"esriPMS"}));
+
+  //init the layer, more options are available and explained in the cluster layer constructor
+  var clusterLayer = new FlareClusterLayer({
+      id: "flare-cluster-layer",
+      spatialReference: new esri.SpatialReference({ "wkid": 4326 }),
+      displaySingleFlaresAtCount: 10,
+      singleFlareTooltipProperty: "title",
+      flareShowMode: "mouse",
+      preClustered: false,
+      clusterRatio: 10,
+      idPropertyName: "title"      
+  });
+ 
+  clusterLayer.setRenderer(renderer); //use standard setRenderer.
+  
+   
+  var popup = new Popup({
+    fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+      new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+        new Color([255, 0, 0]), 2), new Color([255, 255, 0, 0.25])),
+        titleInBody: false
+  }, domConstruct.create("div"));
+
+  domClass.add(popup.domNode, "myTheme");  
+  
+  //define a popup template
+  var template = new InfoTemplate({});
+  template.setTitle("${title} - ${daterange}");
+  template.setContent("${description}");
+   
+   
+  var map = new Map("map", {
+    center: [0,0],
+    zoom: 3,
+    basemap: "gray-vector",
+    wrapAround180: false,
+    maxZoom: 10,
+    minZoom: 2
+  });
+  
+  var link = domConstruct.create("a",{
+    "innerHTML": "Map Catalogue", //text that appears in the popup for the link 
+    "href": "javascript: void(0);"
+  }, query(".actionList", map.infoWindow.domNode)[0]);
+              
+  //when the link is clicked register a function that will run 
+  on(link, "click", createLink);
+  
+  clusterLayer.infoTemplate = template;
+  map.infoWindow.titleInBody = false;
+  map.infoWindow.resize(440,200);
+  
+  map.addLayer(clusterLayer);
+  
+ 
+  requestGoogleSpreadsheet();
+  
+  
+  
+  
+  function requestGoogleSpreadsheet() {
+    //get mission details from Google Spreadsheet
+    var requestHandle = esriRequest({
+       url: "https://spreadsheets.google.com/feeds/list/1_tUmBiTBC2KZ4LrftQl0MQ8m6tf0PpeuAbUaDw-WbNY/oopuhvi/public/values?alt=json",
+       callbackParamName: "jsoncallback"
+       });
+    requestHandle.then(requestSucceeded, requestFailed);
+  }; 
+
+  function createLink(evt){
+    var feature = map.infoWindow.getSelectedFeature();
+    window.open(feature.attributes.mdr_link);
+  }; 
+   
+  function requestSucceeded(response, io) {
+      //loop through the items and add to the feature layer
+    var features = [];    
+    array.forEach(response.feed.entry, function(item) {
+      if(item.gsx$activitysubcategory.$t == "Deployment")
+      {
+        var feature = {
+          "title": item.gsx$title.$t,
+          "description": item.gsx$description.$t,
+          "disastertype": item.gsx$disastertype.$t,
+          "mdr_link": item.gsx$mdrurl.$t,
+          "daterange": item.gsx$daterangestring.$t,
+          "x": Number(item.gsx$longitude.$t),
+          "y": Number(item.gsx$latitude.$t)
+        };
+        features.push(feature);
+      }
+    }); 
+    clusterLayer.addData(features);   
+  };
+
+  function requestFailed(error) {
+    console.log('failed');
+  };
+
+    
+});
+  
+</script>
+</head>
+<body class="claro">
+  <div id="map"></div>
+  <div id="info"><div id="legendDiv"></div></div>
+</body>
+</html>
