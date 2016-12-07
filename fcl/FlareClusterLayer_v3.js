@@ -963,7 +963,7 @@ define([
                 var attributes = fo.singleData ? lang.clone(fo.singleData) : {};
                 attributes.isFlare = true;
                 
-                sym = new PictureMarkerSymbol({"url": "./images/" + attributes.iconURL, "width": 18, "height": 18, "type":"esriPMS"});
+                sym = new PictureMarkerSymbol({"url": "images/" + attributes.iconURL, "width": 18, "height": 18, "type":"esriPMS"});
                 
                 var flareGraphic = new Graphic(fo.mapPoint, sym, attributes, null);
                 this.add(flareGraphic);
