@@ -75,20 +75,9 @@
     var defaultSymbol = new SimpleMarkerSymbol().setSize(36).setColor("#106cb5").setOutline(null);  
     
     var renderer = new UniqueValueRenderer(defaultSymbol, "disastertype");
-      
-    renderer.addValue("Conflict", PictureMarkerSymbol({"url": "fcl/images/conflict_blue_40px.png", "width": 18, "height": 18, "type":"esriPMS"}));
-    renderer.addValue("Cyclone", PictureMarkerSymbol({"url": "fcl/images/cyclone_blue_40px.png", "width": 18, "height": 18, "type":"esriPMS"}));
-    renderer.addValue("Earthquake", PictureMarkerSymbol({"url": "fcl/images/earthquake_blue_40px.png", "width": 18, "height": 18, "type":"esriPMS"}));
-    renderer.addValue("Earthquake, Tsunami", PictureMarkerSymbol({"url": "fcl/images/tsunami_blue_40px.png", "width": 18, "height": 18, "type":"esriPMS"}));
-    renderer.addValue("Ebola", PictureMarkerSymbol({"url": "fcl/images/epidemic_blue_40px.png","width": 18,"height": 18,"type":"esriPMS"}));
-    renderer.addValue("Floods", PictureMarkerSymbol({"url": "fcl/images/flood_blue_40px.png","width": 18,"height": 18,"type":"esriPMS"}));
-    renderer.addValue("Food security", PictureMarkerSymbol({"url": "fcl/images/food_security_blue_40px.png","width": 18,"height": 18,"type":"esriPMS"}));
-    renderer.addValue("Munitions explosion", PictureMarkerSymbol({"url": "fcl/images/munitions_blue_40px.png","width": 18,"height": 18,"type":"esriPMS"}));
-    renderer.addValue("Population displacement", PictureMarkerSymbol({"url": "fcl/images/population_displacement_blue_40px.png","width": 18,"height": 18,"type":"esriPMS"}));
-    renderer.addValue("Post election violence", PictureMarkerSymbol({"url": "fcl/images/post_conflict_blue_40px.png","width": 18,"height": 18,"type":"esriPMS"}));
-    renderer.addValue("Tsunami", PictureMarkerSymbol({"url": "fcl/images/tsunami_blue_40px.png","width": 18,"height": 18,"type":"esriPMS"}));
-    renderer.addValue("Volcano", PictureMarkerSymbol({"url": "fcl/images/volcano_blue_40px.png","width": 18,"height": 18,"type":"esriPMS"}));
-   
+    
+    initSingleFeatureRenderer(renderer);
+  
     //init the layer, more options are available and explained in the cluster layer constructor
     clusterLayer = new FlareClusterLayer({
         id: "flare-cluster-layer",
@@ -126,9 +115,7 @@
     clusterLayer.setRenderer(renderer); //use standard setRenderer.
     map.addLayer(clusterLayer);
     requestGoogleSpreadsheet();
-    
-    
-    
+   
   };
   
   function requestGoogleSpreadsheet() {
@@ -175,6 +162,29 @@
   };
   
 
+  function initSingleFeatureRenderer(renderer){
+    
+    var iconSize = 20;
+    var iconLookup = {     
+        'Conflict':                'fcl/images/conflict_blue_40px.png',
+        'Cyclone':                 'fcl/images/cyclone_blue_40px.png',
+        'Earthquake':              'fcl/images/earthquake_blue_40px.png',
+        'Earthquake, Tsunami':     'fcl/images/tsunami_blue_40px.png',
+        'Ebola':                   'fcl/images/epidemic_blue_40px.png',
+        'Floods':                  'fcl/images/flood_blue_40px.png',
+        'Food security':           'fcl/images/food_security_blue_40px.png',
+        'Munitions explosion':     'fcl/images/munitions_blue_40px.png',
+        'Population displacement': 'fcl/images/population_displacement_blue_40px.png',
+        'Post election violence':  'fcl/images/post_conflict_blue_40px.png',
+        'Tsunami':                 'fcl/images/tsunami_blue_40px.png',
+        'Volcano':                 'fcl/images/volcano_blue_40px.png'
+    }
+
+    for (var key in iconLookup) {
+        renderer.addValue(key, PictureMarkerSymbol({"url": iconLookup[key], "width": iconSize, "height": iconSize, "type":"esriPMS"}));
+    }
+  };
+  
     
 });
   
