@@ -113,7 +113,7 @@
     }, query(".actionList", map.infoWindow.domNode)[0]);
                 
     //when the link is clicked register a function that will run 
-    on(mdrLink, "click", createLink);
+    on(mdrLink, "click", createMDRLink);
 
     //define a popup template
     var template = new InfoTemplate({});
@@ -137,10 +137,10 @@
        url: "https://spreadsheets.google.com/feeds/list/1_tUmBiTBC2KZ4LrftQl0MQ8m6tf0PpeuAbUaDw-WbNY/oopuhvi/public/values?alt=json",
        callbackParamName: "jsoncallback"
        });
-    requestHandle.then(requestSucceeded, requestFailed);
+    requestHandle.then(requestGSSSucceeded, requestGSSFailed);
   };
   
-  function requestSucceeded(response, io) {
+  function requestGSSSucceeded(response, io) {
       //loop through the items and add to the feature layer
     var features = [];
     var id = 0;
@@ -165,11 +165,11 @@
     clusterLayer.addData(features);   
   };
 
-  function requestFailed(error) {
+  function requestGSSFailed(error) {
     console.log('failed');
   };
   
-  function createLink(evt){
+  function createMDRLink(evt){
     var feature = map.infoWindow.getSelectedFeature();
     window.open(feature.attributes.mdr_link);
   };
