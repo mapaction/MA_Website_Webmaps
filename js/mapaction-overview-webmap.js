@@ -70,7 +70,6 @@
   map.on("load", mapLoaded);
   
   function mapLoaded(){
-  
     //define the symbology renderer for a default marker  
     var defaultSymbol = new SimpleMarkerSymbol().setSize(36).setColor("#106cb5").setOutline(null);  
     
@@ -86,37 +85,17 @@
         singleFlareTooltipProperty: "title",
         flareShowMode: "mouse",
         preClustered: false,
-        clusterRatio: 10,
+        clusterRatio: 60,
         idPropertyName: "id"      
     });
     
-    var popup = new Popup({
-          titleInBody: false
-    }, domConstruct.create("div"));
-
-    domClass.add(popup.domNode, "myTheme");
-    
-    var mdrLink = domConstruct.create("a",{
-      "innerHTML": "Map Catalogue", //text that appears in the popup for the link 
-      "href": "javascript: void(0);"
-    }, query(".actionList", map.infoWindow.domNode)[0]);
-                
-    //when the link is clicked register a function that will run 
-    on(mdrLink, "click", createMDRLink);
-
-    //define a popup template
-    var template = new InfoTemplate({});
-    template.setTitle("${title} - ${daterange}");
-    template.setContent("${description}");
-    
-    clusterLayer.infoTemplate = template;
-    map.infoWindow.resize(440,200);
+    initPopups(map);
     
     clusterLayer.setRenderer(renderer); //use standard setRenderer.
     map.addLayer(clusterLayer);
     requestGoogleSpreadsheet();
-   
   };
+
   
   function requestGoogleSpreadsheet() {
     //get mission details from Google Spreadsheet
@@ -127,8 +106,9 @@
     requestHandle.then(requestGSSSucceeded, requestGSSFailed);
   };
   
+  
   function requestGSSSucceeded(response, io) {
-      //loop through the items and add to the feature layer
+    //loop through the items and add to the feature layer
     var features = [];
     var id = 0;
     array.forEach(response.feed.entry, function(item) {
@@ -152,6 +132,7 @@
     clusterLayer.addData(features);   
   };
 
+  
   function requestGSSFailed(error) {
     console.log('failed');
   };
@@ -163,7 +144,6 @@
   
 
   function initSingleFeatureRenderer(renderer){
-    
     var iconSize = 20;
     var iconLookup = {     
         'Conflict':                'fcl/images/conflict_blue_40px.png',
@@ -185,6 +165,29 @@
     }
   };
   
+  function initPopups(map){
+    var popup = new Popup({
+          titleInBody: false
+    }, domConstruct.create("div"));
+
+    domClass.add(popup.domNode, "myTheme");
+    
+    var mdrLink = domConstruct.create("a",{
+      "innerHTML": "Map Catalogue", //text that appears in the popup for the link 
+      "href": "javascript: void(0);"
+    }, query(".actionList", map.infoWindow.domNode)[0]);
+                
+    //when the link is clicked register a function that will run 
+    on(mdrLink, "click", createMDRLink);
+
+    //define a popup template
+    var template = new InfoTemplate({});
+    template.setTitle("${title} - ${daterange}");
+    template.setContent("${description}");
+    
+    clusterLayer.infoTemplate = template;
+    map.infoWindow.resize(440,200);
+  };
     
 });
   
