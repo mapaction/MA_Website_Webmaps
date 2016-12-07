@@ -60,11 +60,11 @@
   var clusterLayer;
   var map = new Map("map", {
     center: [0,0],
-    zoom: 3,
+    zoom: 1,
     basemap: "gray-vector",
     wrapAround180: false,
     maxZoom: 10,
-    minZoom: 2
+    minZoom: 1
   })
   
   map.on("load", mapLoaded);
@@ -111,6 +111,12 @@
     //loop through the items and add to the feature layer
     var features = [];
     var id = 0;
+    var iconRoot = 'wp-content/plugins/ma-webmaps/images/'
+    // Use relative path if running locally whilst debugging.
+    if (location.hostname) {
+        iconRoot = location.origin + '/' + iconRoot
+    }
+
     array.forEach(response.feed.entry, function(item) {
       if(item.gsx$activitysubcategory.$t == "Deployment")
       {
@@ -121,7 +127,7 @@
           "disastertype": item.gsx$disastertype.$t,
           "mdr_link": item.gsx$mdrurl.$t,
           "daterange": item.gsx$daterangestring.$t,
-          "iconURL": item.gsx$iconfilename.$t,
+          "iconURL": iconRoot + item.gsx$iconfilename.$t,
           "x": Number(item.gsx$longitude.$t),
           "y": Number(item.gsx$latitude.$t)
         };
@@ -143,21 +149,40 @@
   };
   
 
+/*   function getIconRootURL(iconRoot){
+    var _path = 'wp-content/plugins/ma-webmaps/images/'
+    // Use relative path if running locally whilst debugging.
+    if (location.hostname) {
+        _path = '/' + _path
+    }
+    iconRoot = _path
+  } */
+  
   function initSingleFeatureRenderer(renderer){
     var iconSize = 20;
+    //var iconRoot = "";
+    //getIconRootURL(iconRoot);
+    
+    var iconRoot = 'wp-content/plugins/ma-webmaps/images/'
+    // Use relative path if running locally whilst debugging.
+    if (location.hostname) {
+        iconRoot = '/' + iconRoot
+    }
+    
+      
     var iconLookup = {     
-        'Conflict':                'fcl/images/conflict_blue_40px.png',
-        'Cyclone':                 'fcl/images/cyclone_blue_40px.png',
-        'Earthquake':              'fcl/images/earthquake_blue_40px.png',
-        'Earthquake, Tsunami':     'fcl/images/tsunami_blue_40px.png',
-        'Ebola':                   'fcl/images/epidemic_blue_40px.png',
-        'Floods':                  'fcl/images/flood_blue_40px.png',
-        'Food security':           'fcl/images/food_security_blue_40px.png',
-        'Munitions explosion':     'fcl/images/munitions_blue_40px.png',
-        'Population displacement': 'fcl/images/population_displacement_blue_40px.png',
-        'Post election violence':  'fcl/images/post_conflict_blue_40px.png',
-        'Tsunami':                 'fcl/images/tsunami_blue_40px.png',
-        'Volcano':                 'fcl/images/volcano_blue_40px.png'
+        'Conflict':                iconRoot + 'conflict_blue_40px.png',
+        'Cyclone':                 iconRoot + 'cyclone_blue_40px.png',
+        'Earthquake':              iconRoot + 'earthquake_blue_40px.png',
+        'Earthquake, Tsunami':     iconRoot + 'tsunami_blue_40px.png',
+        'Ebola':                   iconRoot + 'epidemic_blue_40px.png',
+        'Floods':                  iconRoot + 'flood_blue_40px.png',
+        'Food security':           iconRoot + 'food_security_blue_40px.png',
+        'Munitions explosion':     iconRoot + 'munitions_blue_40px.png',
+        'Population displacement': iconRoot + 'population_displacement_blue_40px.png',
+        'Post election violence':  iconRoot + 'post_conflict_blue_40px.png',
+        'Tsunami':                 iconRoot + 'tsunami_blue_40px.png',
+        'Volcano':                 iconRoot + 'volcano_blue_40px.png'
     }
 
     for (var key in iconLookup) {
