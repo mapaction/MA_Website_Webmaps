@@ -24,6 +24,7 @@ define([
   "esri/symbols/SimpleMarkerSymbol",
   "esri/symbols/SimpleFillSymbol",
   "esri/symbols/SimpleLineSymbol",
+  "esri/symbols/PictureMarkerSymbol",
   "esri/symbols/TextSymbol",
 
   "esri/dijit/PopupTemplate",
@@ -31,7 +32,7 @@ define([
 ], function (
   declare, lang, arrayUtils, on, coreFx, gfx, fx, tap,
   SpatialReference, Extent, Multipoint, Point, Polygon, ScreenPoint, webMercatorUtils, geometryEngine, Graphic,
-  Color, ClassBreaksRenderer, Font, SimpleMarkerSymbol, SimpleFillSymbol, SimpleLineSymbol, TextSymbol,
+  Color, ClassBreaksRenderer, Font, SimpleMarkerSymbol, SimpleFillSymbol, SimpleLineSymbol, PictureMarkerSymbol, TextSymbol,
   PopupTemplate, GraphicsLayer
 ) {
     return declare([GraphicsLayer], {
@@ -422,9 +423,9 @@ define([
                 if (e.graphic.attributes.isCluster) {
                     this._activateCluster(e.graphic);
                 }
-                else if (e.graphic.attributes.isFlare) {
-                    this._showFlareDetail(e.graphic);
-                }
+                //else if (e.graphic.attributes.isFlare) {
+                    //this._showFlareDetail(e.graphic);
+                //}
             }
         },
 
@@ -961,6 +962,9 @@ define([
 
                 var attributes = fo.singleData ? lang.clone(fo.singleData) : {};
                 attributes.isFlare = true;
+                
+                sym = new PictureMarkerSymbol({"url": "../images/" + attributes.iconURL, "width": 18, "height": 18, "type":"esriPMS"});
+                
                 var flareGraphic = new Graphic(fo.mapPoint, sym, attributes, null);
                 this.add(flareGraphic);
                 var flareCircle = flareGraphic.getShape();
