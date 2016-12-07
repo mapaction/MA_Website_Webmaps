@@ -107,13 +107,13 @@
 
     domClass.add(popup.domNode, "myTheme");
     
-    var link = domConstruct.create("a",{
+    var mdrLink = domConstruct.create("a",{
       "innerHTML": "Map Catalogue", //text that appears in the popup for the link 
       "href": "javascript: void(0);"
     }, query(".actionList", map.infoWindow.domNode)[0]);
                 
     //when the link is clicked register a function that will run 
-    on(link, "click", createLink);
+    on(mdrLink, "click", createLink);
 
     //define a popup template
     var template = new InfoTemplate({});
