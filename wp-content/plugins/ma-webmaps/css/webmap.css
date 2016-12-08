@@ -1,0 +1,40 @@
+html, body, #map {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.esriPopup.myTheme .titlePane,
+.dj_ie7 .esriPopup.myTheme .titlePane .title {
+  background-color: #106cb5;
+  color: #333333;
+  font-weight: bold;
+}
+
+.esriPopup.myTheme .titlePane {
+  border-bottom: 1px solid #121310;
+}
+
+.esriPopup.myTheme a {
+  color: #106cb5;
+}
+.esriPopup.myTheme .pointer.top{
+  background-color:#899752;
+}
+.esriPopup.myTheme .outerPointer,  .esriPopup.myTheme .pointer.bottom{
+  background-color:#424242;
+}
+
+.esriPopup.myTheme .contentPane,
+.esriPopup.myTheme .actionsPane {
+  border-color: 1px solid #121310;
+  background-color: #dddddd;
+  color: #000000;
+}
+
+.esriPopup .titlePane {
+  background-color: #0565b3;
+}    
+
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>  
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+  <title>MapAction Deployments</title>
+  
+  <!-- INSERT INTO WORDPRESS FROM HERE -->
+  <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
+  <link rel="stylesheet" href="wp-content/plugins/ma-webmaps/css/webmap.css">
+  <script>
+  var dojoConfig = {
+      parseOnLoad: false,
+      async: true,
+      tlmSiblingOfDojo: false,
+      packages: [{
+          name: "fcl",
+          location: location.pathname.replace(/\/[^/]+$/, '') + "/wp-content/plugins/ma-webmaps/js/fcl"
+      }]
+  };
+  </script>
+  <script src="https://js.arcgis.com/3.18/"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="wp-content/plugins/ma-webmaps/js/mapaction-overview-webmap.js"></script>
+  <!-- END INSERT INTO WORDPRESS FROM HERE -->
+
+</head>
+<body class="claro">
+  <!-- INSERT INTO WORDPRESS FROM HERE -->
+  <div id="map"></div>
+  <!-- END INSERT INTO WORDPRESS FROM HERE -->
+  <div id="info"><div id="legendDiv"></div></div>
+</body>
+</html>
