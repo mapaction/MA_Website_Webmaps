@@ -6,11 +6,13 @@ WP_ROOT=`readlink -f $DEPLOY_DIR/..`
 
 HOST='sftp.flywheelsites.com'
 
-if ['production' == $1]
+if [[ 'production' == $1 ]]
 then
   REMOTE_WP_ROOT='/org-mapaction/mapactionmain'
+  echo using production values
 else
   REMOTE_WP_ROOT='/org-mapaction/mapactionmain_staging'
+  echo using staging values
 fi
 
 PATH_TO_PLUGIN_FOLDER='wp-content/plugins'
