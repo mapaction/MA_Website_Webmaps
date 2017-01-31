@@ -5,7 +5,14 @@ WP_ROOT=`readlink -f $DEPLOY_DIR/..`
 # WP_ROOT="$ROOT"
 
 HOST='sftp.flywheelsites.com'
-REMOTE_WP_ROOT='/org-mapaction/mapactionmain_staging'
+
+if ['production' == $1]
+then
+  REMOTE_WP_ROOT='/org-mapaction/mapactionmain'
+else
+  REMOTE_WP_ROOT='/org-mapaction/mapactionmain_staging'
+fi
+
 PATH_TO_PLUGIN_FOLDER='wp-content/plugins'
 WEBMAP_PLUGIN_NAME='ma-webmaps'
 
