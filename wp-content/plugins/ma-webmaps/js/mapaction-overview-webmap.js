@@ -158,7 +158,7 @@
         'Earthquake':              iconRoot + 'earthquake_blue_40px.png',
         'Earthquake, Tsunami':     iconRoot + 'tsunami_blue_40px.png',
         'Ebola':                   iconRoot + 'epidemic_blue_40px.png',
-        'Fire':                    iconRoot + 'fire_blue_40px.png'
+        'Fire':                    iconRoot + 'fire_blue_40px.png',
         'Floods':                  iconRoot + 'flood_blue_40px.png',
         'Food security':           iconRoot + 'food_security_blue_40px.png',
         'Munitions explosion':     iconRoot + 'munitions_blue_40px.png',
