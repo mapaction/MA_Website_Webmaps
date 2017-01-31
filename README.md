@@ -16,7 +16,13 @@ git pull
 ```
 You will need a suitable flywheel account to do this.
 
-Currently in order to deploy to live; first deploy to staging, then use staging->live feature in flywheel's web interface.
+The script called without any parameters will deploy to the staging server. If the keyword "production" is added as a parameter the webmap will be deployed to the production server, eg:
+```
+git pull
+./deploy/deploy_webmaps.sh production
+```
+
+Alternatively to deploy to live; first deploy to staging, then use staging->live feature in flywheel's web interface. However please note that this can overwrite all the content from staging->live (not just the webmap), therefore might not always be appropriate.
 
 
 Embedding in a wordpress page
