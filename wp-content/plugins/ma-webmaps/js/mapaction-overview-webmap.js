@@ -41,7 +41,7 @@
   esriConfig.defaults.io.corsEnabledServers.push("spreadsheets.google.com");
   var clusterLayer;
   var map = new Map("map", {
-    center: [0,0],
+    center: [20,0],
     zoom: 1,
     basemap: "gray-vector",
     wrapAround180: false,
