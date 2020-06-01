@@ -166,7 +166,7 @@
         'Population displacement': iconRoot + 'population_displacement_blue_40px.png',
         'Post election violence':  iconRoot + 'post_conflict_blue_40px.png',
         'Tsunami':                 iconRoot + 'tsunami_blue_40px.png',
-        'Volcano':                 iconRoot + 'volcano_blue_40px.png'  
+        'Volcano':                 iconRoot + 'volcano_blue_40px.png', 
         'Covid-19':                iconRoot + 'covid-19.png'    
     }
 
