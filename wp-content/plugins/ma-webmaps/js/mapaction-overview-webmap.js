@@ -158,7 +158,7 @@
         'Earthquake':              iconRoot + 'earthquake_blue_40px.png',
         'Earthquake, Tsunami':     iconRoot + 'tsunami_blue_40px.png',
         'Ebola':                   iconRoot + 'epidemic_blue_40px.png',
-        'Economic':                 iconRoot + 'economic_40px_blue.png',
+        'Economic':                iconRoot + 'economic_40px_blue.png',
         'Fire':                    iconRoot + 'fire_blue_40px.png',
         'Floods':                  iconRoot + 'flood_blue_40px.png',
         'Food security':           iconRoot + 'food_security_blue_40px.png',
@@ -166,7 +166,8 @@
         'Population displacement': iconRoot + 'population_displacement_blue_40px.png',
         'Post election violence':  iconRoot + 'post_conflict_blue_40px.png',
         'Tsunami':                 iconRoot + 'tsunami_blue_40px.png',
-        'Volcano':                 iconRoot + 'volcano_blue_40px.png'      
+        'Volcano':                 iconRoot + 'volcano_blue_40px.png'  
+        'Covid-19':                iconRoot + 'covid-19.png'    
     }
 
     for (var key in iconLookup) {
