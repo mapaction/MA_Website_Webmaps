@@ -153,21 +153,22 @@
     
       
     var iconLookup = {     
-        'Conflict':                iconRoot + 'conflict_blue_40px.png',
-        'Cyclone':                 iconRoot + 'cyclone_blue_40px.png',
-        'Earthquake':              iconRoot + 'earthquake_blue_40px.png',
-        'Earthquake, Tsunami':     iconRoot + 'tsunami_blue_40px.png',
-        'Ebola':                   iconRoot + 'epidemic_blue_40px.png',
-        'Economic':                iconRoot + 'economic_40px_blue.png',
-        'Fire':                    iconRoot + 'fire_blue_40px.png',
-        'Floods':                  iconRoot + 'flood_blue_40px.png',
-        'Food security':           iconRoot + 'food_security_blue_40px.png',
-        'Munitions explosion':     iconRoot + 'munitions_blue_40px.png',
-        'Population displacement': iconRoot + 'population_displacement_blue_40px.png',
-        'Post election violence':  iconRoot + 'post_conflict_blue_40px.png',
-        'Tsunami':                 iconRoot + 'tsunami_blue_40px.png',
-        'Volcano':                 iconRoot + 'volcano_blue_40px.png', 
-        'Covid-19':                iconRoot + 'covid-19.png'    
+      'Conflict':                     iconRoot + 'conflict.png',
+      'Covid-19':                     iconRoot + 'covid-19.png',
+      'Cyclone':                      iconRoot + 'cyclone.png',
+      'Earthquake':                   iconRoot + 'earthquake.png',
+      'Earthquake, Tsunami':          iconRoot + 'tsunami.png',
+      'Ebola':                        iconRoot + 'epidemic.png',
+      'Economic':                     iconRoot + 'trade-and-market.png',
+      'Fire':                         iconRoot + 'fire.png',
+      'Floods':                       iconRoot + 'flood.png',
+      'Food security':                iconRoot + 'food-security.png',
+      'Landslide':                    iconRoot + 'landslide-mudslide.png',
+      'Munitions explosion':          iconRoot + 'mines.png',
+      'Population displacement':      iconRoot + 'internally-displaced.png',
+      'Post election violence':       iconRoot + 'election.png',
+      'Tsunami':                      iconRoot + 'tsunami.png',
+      'Volcano':                      iconRoot + 'volcano.png'   
     }
 
     for (var key in iconLookup) {
