@@ -145,11 +145,11 @@
     //var iconRoot = "";
     //getIconRootURL(iconRoot);
     
-    var iconRoot = 'https://' + location.hostname + '/wp-content/plugins/ma-webmaps/images/'
+    var iconRoot = 'wp-content/plugins/ma-webmaps/images/'
     // Use relative path if running locally whilst debugging.
-    //if (location.hostname ==) {
-        //iconRoot = '/' + iconRoot
-    //}
+    if (location.hostname) {
+        iconRoot = '/' + iconRoot
+    }
     
       
     var iconLookup = {     
