@@ -53,7 +53,7 @@
   
   function mapLoaded(){
     //define the symbology renderer for a default marker  
-    var defaultSymbol = new SimpleMarkerSymbol().setSize(36).setColor("#106cb5").setOutline(null);  
+    var defaultSymbol = new SimpleMarkerSymbol().setSize(36).setColor("#11468d").setOutline(null);  
     
     var renderer = new UniqueValueRenderer(defaultSymbol, "disastertype");
     
