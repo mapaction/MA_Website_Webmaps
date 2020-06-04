@@ -69,7 +69,7 @@ define([
             this.displaySubTypeFlares = options.displaySubTypeFlares === true;
             this.subTypeFlareProperty = options.subTypeFlareProperty || null;
 
-            this.flareColor = options.flareColor || new Color([16, 108, 181, 0.5]);
+            this.flareColor = options.flareColor || new Color([17, 70, 141, 0.5]);
             this.maxFlareCount = options.maxFlareCount || 8;
             this.displaySingleFlaresAtCount = options.displaySingleFlaresAtCount || 8;
             this.singleFlareTooltipProperty = options.singleFlareTooltipProperty || null;
